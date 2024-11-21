@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Months {
+  Janvier
+  Fevrier
+  Mars
+  Avril
+  Mai
+  Juin
+  Juillet
+  Aout
+  Septembre
+  Octobre
+  Novembre
+  Decembre
+}
+
+enum Gender {
+  Homme
+  Femme
+}
+
+model Product {
+  id                Int     @id @default(autoincrement())
+  name              String  @unique
+  numberPurchases   String?
+  numberSales       String?
+  pahtnet           String
+  
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Pupil {
+  id                Int     @id @default(autoincrement())
+  name              String  
+  age               String
+  gender            Gender
+  grade             String?
+  isPaymentPhoto    Boolean
+  monthPayment      Months?
+  
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Employee {
+  id                  Int     @id @default(autoincrement())
+  name                String
+  firstName           String
+  gender              Gender
+  age                 String
+  dateOfIntegration   DateTime
+  qualification       String
+  site                String
+  grossSalary         String
+  hoursOfAbsence      String
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
