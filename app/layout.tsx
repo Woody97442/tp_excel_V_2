@@ -4,6 +4,10 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import NavAside from "@/components/Layout/nav-aside";
 import NavHeader from "@/components/Layout/nav-header";
+import { auth } from "@/auth";
+import { getUserById } from "@/data/user";
+import { SessionProvider } from "next-auth/react";
+import UserContextProvider from "@/components/context/user-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,18 +21,26 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
+  const user = await getUserById(session?.user.id as string);
+
   return (
-    <html lang="fr">
-      <body className={inter.className + " bg-[#f5f5f5] dark:bg-gray-900"}>
-        <div className="flex min-h-screen w-full flex-col bg-muted/40 dark:bg-gray-800">
-          <NavAside />
-          <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-40">
-            <NavHeader />
-            {children}
-          </div>
-        </div>
-        <Toaster />
-      </body>
-    </html>
+    <SessionProvider session={session}>
+      <html lang="fr">
+        <body className={inter.className + " bg-[#f5f5f5] dark:bg-gray-900"}>
+          <UserContextProvider user={user}>
+            <div className="flex min-h-screen w-full flex-col bg-muted/40 dark:bg-gray-800">
+              <NavAside />
+              <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-40">
+                <NavHeader />
+                {children}
+              </div>
+            </div>
+          </UserContextProvider>
+          <Toaster />
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

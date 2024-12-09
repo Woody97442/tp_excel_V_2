@@ -66,3 +66,10 @@ export interface CreatedEmployeeType {
     grossSalary: string;
     hoursOfAbsence: string;
 }
+
+export interface CreatedUserType {
+    username: string;
+    email: string;
+    password: string;
+    role: string;
+}
