@@ -53,10 +53,7 @@ export const NewPasswordForm = () => {
   };
 
   return (
-    <CardWrapper
-      headerLabel="Entrer un nouveau mot de passe"
-      backButtonLabel="Revenir à la connexion."
-      backButtonHref="/auth/login">
+    <CardWrapper headerLabel="Entrer un nouveau mot de passe">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

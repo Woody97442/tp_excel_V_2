@@ -1,5 +1,5 @@
 "use server";
-import { CreatedProductType } from "@/components/page/type";
+import { CreatedProductType } from "@/lib/type";
 import { prisma } from "@/prisma/prismaClient";
 
 export const CreateProduct = async (

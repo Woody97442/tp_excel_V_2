@@ -1,4 +1,4 @@
-import { PupilType } from "@/components/page/type";
+import { PupilType } from "@/lib/type";
 import { prisma } from "@/prisma/prismaClient";
 
 export const getPupils = async (): Promise<PupilType[] | null> => {

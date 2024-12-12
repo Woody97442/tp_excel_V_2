@@ -1,4 +1,4 @@
-import { ProductType } from "@/components/page/type";
+import { ProductType } from "@/lib/type";
 import { prisma } from "@/prisma/prismaClient";
 
 // Retourne tous les produits

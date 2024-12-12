@@ -1,5 +1,5 @@
 "use server";
-import { CreatedPupilType } from "@/components/page/type";
+import { CreatedPupilType } from "@/lib/type";
 import { prisma } from "@/prisma/prismaClient";
 
 export const CreatePupil = async (

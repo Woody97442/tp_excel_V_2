@@ -1,4 +1,4 @@
-import { EmployeeType } from "@/components/page/type";
+import { EmployeeType } from "@/lib/type";
 import { prisma } from "@/prisma/prismaClient";
 
 export const getEmployees = async (): Promise<EmployeeType[] | null> => {

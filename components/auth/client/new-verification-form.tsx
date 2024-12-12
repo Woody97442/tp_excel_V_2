@@ -39,10 +39,7 @@ const NewVerificationForm = () => {
   }, [onSubmit]);
 
   return (
-    <CardWrapper
-      headerLabel=""
-      backButtonHref="/auth/login"
-      backButtonLabel="Revenir à la connexion.">
+    <CardWrapper headerLabel="">
       <p className="text-sm text-muted-foreground text-center max-w-xs mx-auto mb-4">
         Confirmation de votre email.
       </p>

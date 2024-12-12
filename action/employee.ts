@@ -1,5 +1,5 @@
 "use server";
-import { CreatedEmployeeType, CreatedPupilType } from "@/components/page/type";
+import { CreatedEmployeeType } from "@/lib/type";
 import { prisma } from "@/prisma/prismaClient";
 
 export const CreateEmployee = async (

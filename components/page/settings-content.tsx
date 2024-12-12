@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import {
   Card,
   CardContent,
@@ -136,8 +136,15 @@ export default function SettingsContent({
       });
     });
   };
+
+  useEffect(() => {
+    if (currentUser?.role === "USER") {
+      router.push("/dashboard");
+    }
+  }, [currentUser, router]);
+
   if (currentUser?.role === "USER") {
-    return router.push("/dashboard");
+    return null; // Retourne null pour ne pas afficher le composant.
   }
 
   return (
