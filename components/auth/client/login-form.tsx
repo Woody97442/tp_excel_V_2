@@ -74,9 +74,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <CardWrapper
-      headerLabel=""
-      showSocial>
+    <CardWrapper headerLabel="">
       {showTwoFactor ? (
         <p className="text-sm text-muted-foreground text-center max-w-xs mx-auto mb-3">
           Un code de double authentification a été envoyé à votre adresse email

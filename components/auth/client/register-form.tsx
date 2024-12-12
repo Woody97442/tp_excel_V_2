@@ -55,9 +55,7 @@ export const RedisterForm = () => {
   };
 
   return (
-    <CardWrapper
-      headerLabel=""
-      showSocial>
+    <CardWrapper headerLabel="">
       <p className="text-sm text-muted-foreground text-center max-w-xs mx-auto mb-3">
         Création d&#39;un compte utilisateur.
       </p>
