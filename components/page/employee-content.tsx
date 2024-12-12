@@ -47,12 +47,14 @@ import { FormatPrice } from "@/lib/format-price";
 import AgeAverageGraph from "../graph/age-average-graph";
 import SalarySumGraph from "../graph/salary-sum-graph";
 import AbcenseStackBarGraph from "../graph/abcense-stack-bar-graph";
+import FindUserContext from "@/lib/user-context-provider";
 
 export default function EmployeeContent({
   allEmployee,
 }: {
   allEmployee: EmployeeType[] | null;
 }) {
+  const { currentUser } = FindUserContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentEmployee, setCurrentEmployee] = useState<EmployeeType[] | null>(
@@ -267,17 +269,19 @@ export default function EmployeeContent({
                           <TableCell className="table-cell text-center">
                             {employee.hoursOfAbsence} h
                           </TableCell>
-                          <TableCell className="table-cell text-center">
-                            <Button
-                              className="h-fit w-fit p-2 text-center "
-                              variant="destructive"
-                              disabled={isPending}
-                              onClick={() => {
-                                handleDeleteEmployee(employee.id);
-                              }}>
-                              <FaRegTrashAlt />
-                            </Button>
-                          </TableCell>
+                          {currentUser?.role == "ADMIN" && (
+                            <TableCell className="table-cell text-center">
+                              <Button
+                                className="h-fit w-fit p-2 text-center "
+                                variant="destructive"
+                                disabled={isPending}
+                                onClick={() => {
+                                  handleDeleteEmployee(employee.id);
+                                }}>
+                                <FaRegTrashAlt />
+                              </Button>
+                            </TableCell>
+                          )}
                         </TableRow>
                       ))
                   ) : (
@@ -289,168 +293,176 @@ export default function EmployeeContent({
                       </TableCell>
                     </TableRow>
                   )}
-                  <TableRow>
-                    <TableCell className="text-left">
-                      Ajouter un Employé.
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    className={
-                      "bg-white dark:bg-gray-700 dark:text-white cursor-pointer"
-                    }>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Nom"
-                        value={nameEmployee}
-                        onChange={(e) => {
-                          setNameEmployee(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Prénom"
-                        value={firstName}
-                        onChange={(e) => {
-                          setFirstName(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Select
-                        onValueChange={(value: Gender) => setGender(value)}>
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Choisir le genre" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Genre</SelectLabel>
-                            <SelectItem value="Homme">Homme</SelectItem>
-                            <SelectItem value="Femme">Femme</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Âge"
-                        value={age}
-                        type="number"
-                        onChange={(e) => {
-                          setAge(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-[280px] justify-start text-left font-normal",
-                              !dateOfIntegration && "text-muted-foreground"
-                            )}>
-                            <CalendarIcon />
-                            {dateOfIntegration ? (
-                              format(dateOfIntegration, "PPP", { locale: fr }) // Utilisez la locale française pour formater la date
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode="single"
-                            selected={dateOfIntegration}
-                            onSelect={setDateOfIntegration}
-                            autoFocus
-                            required={true}
-                            locale={fr}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Select
-                        onValueChange={(value: string) =>
-                          setQualification(value)
+                  {currentUser?.role == "ADMIN" && (
+                    <>
+                      <TableRow>
+                        <TableCell className="text-left">
+                          Ajouter un Employé.
+                        </TableCell>
+                      </TableRow>
+                      <TableRow
+                        className={
+                          "bg-white dark:bg-gray-700 dark:text-white cursor-pointer"
                         }>
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Choisir de la qualification" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Mois</SelectLabel>
-                            {listQualification &&
-                              listQualification.length > 0 &&
-                              listQualification.map((qualification, index) => (
-                                <SelectItem
-                                  key={index}
-                                  value={qualification.value}>
-                                  {qualification.value}
-                                </SelectItem>
-                              ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Site"
-                        value={site}
-                        onChange={(e) => {
-                          setSite(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Salaire brut"
-                        value={grossSalary}
-                        type="number"
-                        onChange={(e) => {
-                          setGrossSalary(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Absences"
-                        value={hoursOfAbsence}
-                        type="number"
-                        onChange={(e) => {
-                          setHoursOfAbsence(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Button
-                        className="h-fit w-fit p-2 text-center"
-                        variant={"default"}
-                        disabled={
-                          nameEmployee === "" ||
-                          firstName === "" ||
-                          age === "" ||
-                          dateOfIntegration === null ||
-                          qualification === "" ||
-                          site === "" ||
-                          grossSalary === "" ||
-                          hoursOfAbsence === "" ||
-                          isPending
-                        }
-                        onClick={() => {
-                          handleCreateEmployee();
-                        }}>
-                        Ajouter
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Nom"
+                            value={nameEmployee}
+                            onChange={(e) => {
+                              setNameEmployee(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Prénom"
+                            value={firstName}
+                            onChange={(e) => {
+                              setFirstName(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Select
+                            onValueChange={(value: Gender) => setGender(value)}>
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Choisir le genre" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectLabel>Genre</SelectLabel>
+                                <SelectItem value="Homme">Homme</SelectItem>
+                                <SelectItem value="Femme">Femme</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Âge"
+                            value={age}
+                            type="number"
+                            onChange={(e) => {
+                              setAge(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-[280px] justify-start text-left font-normal",
+                                  !dateOfIntegration && "text-muted-foreground"
+                                )}>
+                                <CalendarIcon />
+                                {dateOfIntegration ? (
+                                  format(dateOfIntegration, "PPP", {
+                                    locale: fr,
+                                  }) // Utilisez la locale française pour formater la date
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar
+                                mode="single"
+                                selected={dateOfIntegration}
+                                onSelect={setDateOfIntegration}
+                                autoFocus
+                                required={true}
+                                locale={fr}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Select
+                            onValueChange={(value: string) =>
+                              setQualification(value)
+                            }>
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Choisir de la qualification" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectLabel>Mois</SelectLabel>
+                                {listQualification &&
+                                  listQualification.length > 0 &&
+                                  listQualification.map(
+                                    (qualification, index) => (
+                                      <SelectItem
+                                        key={index}
+                                        value={qualification.value}>
+                                        {qualification.value}
+                                      </SelectItem>
+                                    )
+                                  )}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Site"
+                            value={site}
+                            onChange={(e) => {
+                              setSite(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Salaire brut"
+                            value={grossSalary}
+                            type="number"
+                            onChange={(e) => {
+                              setGrossSalary(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Absences"
+                            value={hoursOfAbsence}
+                            type="number"
+                            onChange={(e) => {
+                              setHoursOfAbsence(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Button
+                            className="h-fit w-fit p-2 text-center"
+                            variant={"default"}
+                            disabled={
+                              nameEmployee === "" ||
+                              firstName === "" ||
+                              age === "" ||
+                              dateOfIntegration === null ||
+                              qualification === "" ||
+                              site === "" ||
+                              grossSalary === "" ||
+                              hoursOfAbsence === "" ||
+                              isPending
+                            }
+                            onClick={() => {
+                              handleCreateEmployee();
+                            }}>
+                            Ajouter
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  )}
                 </TableBody>
               </Table>
             </CardContent>

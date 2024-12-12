@@ -34,12 +34,14 @@ import {
   ChartTooltipContent,
 } from "../ui/chart";
 import { FaRegTrashAlt } from "react-icons/fa";
+import FindUserContext from "@/lib/user-context-provider";
 
 export default function DashboardContent({
   allProducts,
 }: {
   allProducts: ProductType[] | null;
 }) {
+  const { currentUser } = FindUserContext();
   const [nameProduct, setNameProduct] = useState("");
   const [numberProduct, setNumberProduct] = useState("");
   const [numberProductSale, setNumberProductSale] = useState("");
@@ -296,17 +298,19 @@ export default function DashboardContent({
                               parseInt(product.numberSales || "0")}{" "}
                             €
                           </TableCell>
-                          <TableCell className="table-cell text-center">
-                            <Button
-                              className="h-fit w-fit p-2 text-center "
-                              variant="destructive"
-                              disabled={isPending}
-                              onClick={() => {
-                                handleDeleteProduct(product.id);
-                              }}>
-                              <FaRegTrashAlt />
-                            </Button>
-                          </TableCell>
+                          {currentUser?.role == "ADMIN" && (
+                            <TableCell className="table-cell text-center">
+                              <Button
+                                className="h-fit w-fit p-2 text-center "
+                                variant="destructive"
+                                disabled={isPending}
+                                onClick={() => {
+                                  handleDeleteProduct(product.id);
+                                }}>
+                                <FaRegTrashAlt />
+                              </Button>
+                            </TableCell>
+                          )}
                         </TableRow>
                       ))
                   ) : (
@@ -318,81 +322,85 @@ export default function DashboardContent({
                       </TableCell>
                     </TableRow>
                   )}
-                  <TableRow>
-                    <TableCell className="text-left">
-                      Ajouter un produit.
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    className={
-                      "bg-white dark:bg-gray-700 dark:text-white cursor-pointer"
-                    }>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Nom"
-                        value={nameProduct}
-                        onChange={(e) => {
-                          setNameProduct(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Nombre d'achat"
-                        value={numberProduct}
-                        onChange={(e) => {
-                          setNumberProduct(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Nombre de vente"
-                        value={numberProductSale}
-                        onChange={(e) => {
-                          setNumberProductSale(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Pahtnet"
-                        value={pahtnetProduct}
-                        onChange={(e) => {
-                          setPahtnetProduct(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Stock Théorique"
-                        value={""}
-                        disabled
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Button
-                        className="h-fit w-fit p-2 text-center"
-                        variant={"default"}
-                        disabled={
-                          nameProduct === "" ||
-                          numberProduct === "" ||
-                          pahtnetProduct === "" ||
-                          numberProductSale === "" ||
-                          isPending
-                        }
-                        onClick={() => {
-                          handleCreateProduct();
-                        }}>
-                        Ajouter
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                  {currentUser?.role == "ADMIN" && (
+                    <>
+                      <TableRow>
+                        <TableCell className="text-left">
+                          Ajouter un produit.
+                        </TableCell>
+                      </TableRow>
+                      <TableRow
+                        className={
+                          "bg-white dark:bg-gray-700 dark:text-white cursor-pointer"
+                        }>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Nom"
+                            value={nameProduct}
+                            onChange={(e) => {
+                              setNameProduct(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Nombre d'achat"
+                            value={numberProduct}
+                            onChange={(e) => {
+                              setNumberProduct(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Nombre de vente"
+                            value={numberProductSale}
+                            onChange={(e) => {
+                              setNumberProductSale(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Pahtnet"
+                            value={pahtnetProduct}
+                            onChange={(e) => {
+                              setPahtnetProduct(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Stock Théorique"
+                            value={""}
+                            disabled
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Button
+                            className="h-fit w-fit p-2 text-center"
+                            variant={"default"}
+                            disabled={
+                              nameProduct === "" ||
+                              numberProduct === "" ||
+                              pahtnetProduct === "" ||
+                              numberProductSale === "" ||
+                              isPending
+                            }
+                            onClick={() => {
+                              handleCreateProduct();
+                            }}>
+                            Ajouter
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  )}
                 </TableBody>
               </Table>
             </CardContent>

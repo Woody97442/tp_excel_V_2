@@ -34,12 +34,14 @@ import {
   SelectValue,
 } from "../ui/select";
 import { FaCheck, FaExclamation, FaRegTrashAlt, FaTimes } from "react-icons/fa";
+import FindUserContext from "@/lib/user-context-provider";
 
 export default function PupilsContent({
   allPupils,
 }: {
   allPupils: PupilType[] | null;
 }) {
+  const { currentUser } = FindUserContext();
   const [currentPupils, setCurrentPupils] = useState<PupilType[] | null>(
     allPupils
   );
@@ -296,17 +298,19 @@ export default function PupilsContent({
                           <TableCell className="table-cell text-center">
                             {parseInt(pupil.age) >= 18 ? "Majeur" : "Mineur"}
                           </TableCell>
-                          <TableCell className="table-cell text-center">
-                            <Button
-                              className="h-fit w-fit p-2 text-center "
-                              variant="destructive"
-                              disabled={isPending}
-                              onClick={() => {
-                                handleDeletePupil(pupil.id);
-                              }}>
-                              <FaRegTrashAlt />
-                            </Button>
-                          </TableCell>
+                          {currentUser?.role == "ADMIN" && (
+                            <TableCell className="table-cell text-center">
+                              <Button
+                                className="h-fit w-fit p-2 text-center "
+                                variant="destructive"
+                                disabled={isPending}
+                                onClick={() => {
+                                  handleDeletePupil(pupil.id);
+                                }}>
+                                <FaRegTrashAlt />
+                              </Button>
+                            </TableCell>
+                          )}
                         </TableRow>
                       ))
                   ) : (
@@ -318,134 +322,138 @@ export default function PupilsContent({
                       </TableCell>
                     </TableRow>
                   )}
-                  <TableRow>
-                    <TableCell className="text-left">
-                      Ajouter un Elève.
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    className={
-                      "bg-white dark:bg-gray-700 dark:text-white cursor-pointer"
-                    }>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Nom"
-                        value={namePupil}
-                        onChange={(e) => {
-                          setNamePupil(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Âge"
-                        value={agePupil}
-                        type="number"
-                        onChange={(e) => {
-                          setAgePupil(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Select
-                        onValueChange={(value: Gender) =>
-                          setGenderPupil(value)
+                  {currentUser?.role == "ADMIN" && (
+                    <>
+                      <TableRow>
+                        <TableCell className="text-left">
+                          Ajouter un Elève.
+                        </TableCell>
+                      </TableRow>
+                      <TableRow
+                        className={
+                          "bg-white dark:bg-gray-700 dark:text-white cursor-pointer"
                         }>
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Choisir le genre" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Genre</SelectLabel>
-                            <SelectItem value="Homme">Homme</SelectItem>
-                            <SelectItem value="Femme">Femme</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Note"
-                        value={gradePupil}
-                        type="number"
-                        onChange={(e) => {
-                          setGradePupil(e.target.value);
-                        }}
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Input
-                        placeholder="Paiement photo de classe"
-                        value={""}
-                        disabled
-                        className="h-fit p-2 text-center"
-                      />
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Select
-                        onValueChange={(value: string) =>
-                          setHasPaidPupil(value === "true")
-                        }>
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Oui" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>A-t-il payé ?</SelectLabel>
-                            <SelectItem value="true">Oui</SelectItem>
-                            <SelectItem value="false">Non</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Select
-                        onValueChange={(value: Months | "none") =>
-                          setMonthPayment(
-                            value === "none" ? null : (value as Months)
-                          )
-                        }>
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Choisir un mois" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Mois</SelectLabel>
-                            {listMonths &&
-                              listMonths.length > 0 &&
-                              listMonths.map((month, index) => (
-                                <SelectItem
-                                  key={index}
-                                  value={month.value}>
-                                  {month.label}
-                                </SelectItem>
-                              ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Button
-                        className="h-fit w-fit p-2 text-center"
-                        variant={"default"}
-                        disabled={
-                          namePupil === "" ||
-                          agePupil === "" ||
-                          genderPupil === null ||
-                          gradePupil === "" ||
-                          hasPaidPupil === null ||
-                          isPending
-                        }
-                        onClick={() => {
-                          handleCreatePupil();
-                        }}>
-                        Ajouter
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Nom"
+                            value={namePupil}
+                            onChange={(e) => {
+                              setNamePupil(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Âge"
+                            value={agePupil}
+                            type="number"
+                            onChange={(e) => {
+                              setAgePupil(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Select
+                            onValueChange={(value: Gender) =>
+                              setGenderPupil(value)
+                            }>
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Choisir le genre" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectLabel>Genre</SelectLabel>
+                                <SelectItem value="Homme">Homme</SelectItem>
+                                <SelectItem value="Femme">Femme</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Note"
+                            value={gradePupil}
+                            type="number"
+                            onChange={(e) => {
+                              setGradePupil(e.target.value);
+                            }}
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Input
+                            placeholder="Paiement photo de classe"
+                            value={""}
+                            disabled
+                            className="h-fit p-2 text-center"
+                          />
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Select
+                            onValueChange={(value: string) =>
+                              setHasPaidPupil(value === "true")
+                            }>
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Oui" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectLabel>A-t-il payé ?</SelectLabel>
+                                <SelectItem value="true">Oui</SelectItem>
+                                <SelectItem value="false">Non</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Select
+                            onValueChange={(value: Months | "none") =>
+                              setMonthPayment(
+                                value === "none" ? null : (value as Months)
+                              )
+                            }>
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Choisir un mois" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectLabel>Mois</SelectLabel>
+                                {listMonths &&
+                                  listMonths.length > 0 &&
+                                  listMonths.map((month, index) => (
+                                    <SelectItem
+                                      key={index}
+                                      value={month.value}>
+                                      {month.label}
+                                    </SelectItem>
+                                  ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <Button
+                            className="h-fit w-fit p-2 text-center"
+                            variant={"default"}
+                            disabled={
+                              namePupil === "" ||
+                              agePupil === "" ||
+                              genderPupil === null ||
+                              gradePupil === "" ||
+                              hasPaidPupil === null ||
+                              isPending
+                            }
+                            onClick={() => {
+                              handleCreatePupil();
+                            }}>
+                            Ajouter
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
