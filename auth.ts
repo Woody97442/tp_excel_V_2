@@ -11,6 +11,7 @@ import { getUserById } from "@/data/user";
 import { getTwoFactorConfirmationByUserId } from "./data/two-factor-confirmation";
 
 export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
+    trustHost: true,
     pages: {
         signIn: "auth/login",
         error: "auth/error",
