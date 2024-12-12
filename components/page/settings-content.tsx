@@ -36,6 +36,9 @@ import { DeleteUser } from "@/action/user";
 import { CreatedUserType } from "@/lib/type";
 import { CreateUser } from "@/action/register";
 import FindUserContext from "@/lib/user-context-provider";
+import EditableStateTableCell from "../assets/editable-state-tab-cell";
+import EditableTableCell from "../assets/editable-tab-cell";
+import { useRouter } from "next/navigation";
 
 export default function SettingsContent({
   allUser,
@@ -51,6 +54,7 @@ export default function SettingsContent({
   const [valueEmail, setValueEmail] = useState<string>("");
   const [valuePassword, setValuePassword] = useState<string>("");
   const [valueRole, setValueRole] = useState<UserRole>("USER");
+  const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
 
@@ -132,6 +136,9 @@ export default function SettingsContent({
       });
     });
   };
+  if (currentUser?.role === "USER") {
+    return router.push("/dashboard");
+  }
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -182,18 +189,23 @@ export default function SettingsContent({
                               ? "bg-gray-100 dark:bg-gray-600 dark:text-white cursor-pointer"
                               : "bg-white dark:bg-gray-700 dark:text-white cursor-pointer"
                           }>
-                          <TableCell className="table-cell text-center">
-                            {user.name || user.username}
-                          </TableCell>
+                          <EditableTableCell
+                            initialValue={user.name || user.username || ""}
+                            userId={user.id}
+                            type="username"
+                          />
                           <TableCell className="table-cell text-center">
                             {user.email}
                           </TableCell>
-                          <TableCell className="table-cell text-center">
-                            ***********
-                          </TableCell>
-                          <TableCell className="table-cell text-center">
-                            {user.role}
-                          </TableCell>
+                          <EditableTableCell
+                            initialValue="***********"
+                            userId={user.id}
+                            type="password"
+                          />
+                          <EditableStateTableCell
+                            initialState={user.role}
+                            idUser={user.id}
+                          />
                           <TableCell className="table-cell text-center">
                             {currentUser?.id != user.id && (
                               <Button

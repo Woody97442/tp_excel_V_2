@@ -39,7 +39,7 @@ export const UserButton = ({ user }: { user: User }) => {
         align="end">
         <DropdownMenuItem>
           <FaUserGear className="mr-2 h-4 w-4" />
-          <Link href="/profile">Profile</Link>
+          <Link href="/dashboard/profile">Profile</Link>
         </DropdownMenuItem>
         <LogoutButton>
           <DropdownMenuItem>

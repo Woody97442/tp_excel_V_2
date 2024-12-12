@@ -10,8 +10,6 @@ import Link from "next/link";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { FaChildren } from "react-icons/fa6";
 import { MdOutlineWorkOutline } from "react-icons/md";
-import { ExitIcon } from "@radix-ui/react-icons";
-import { LogoutButton } from "../auth/client/logout-button";
 import { useSession } from "next-auth/react";
 import { UserButton } from "../auth/client/user-button";
 import FindUserContext from "@/lib/user-context-provider";

@@ -31,9 +31,9 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 
 export const sendVerificationEmail = async (email: string, token: string) => {
     const confirmLink = `${process.env.BASE_URL}/auth/new-verification?token=${token}`;
-    const resendEmail = process.env.RESEND_FROM_EMAIL
+    const resendEmail = process.env.RESEND_FROM_EMAIL || "TP Excel V 2 < support@tp-excel.wbpro.fr >"
     await resend.emails.send({
-        from: resendEmail!,
+        from: resendEmail,
         to: email,
         subject: "Confirmer votre email",
         react: VerificationEmailTemplate({ email, confirmLink }),
