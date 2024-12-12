@@ -15,14 +15,6 @@ export default auth((req) => {
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-    const trustedHosts = ['tp-excel.wbpro.fr'];  // Liste des hôtes de confiance
-    const host = req.headers.get('host');  // Récupère l'hôte de la requête
-
-    if (!host || !trustedHosts.includes(host)) {
-        // Rediriger ou renvoyer une erreur si l'hôte n'est pas fiable
-        return Response.redirect(new URL('/auth/error', nextUrl));
-    }
-
     // Si la requête est pour une route d'authentification API, ne rien faire
     if (isApiAuthRoute) {
         return;
