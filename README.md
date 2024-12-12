@@ -71,3 +71,15 @@ La page des employés affiche une liste complète avec la possibilité d'ajouter
 
 ### Page de Facturation
 Une page dédiée à la facturation permet de créer une facture pour un client, avec la possibilité de la télécharger en format PDF via jsPDF.
+
+### Page de Connexion
+La page de connexion permet aux utilisateurs de se connecter et de se connecter.
+
+### Page de Création d'Utilisateur
+La page de création d'utilisateur permet aux administrateurs de créer des nouveaux utilisateurs.
+
+### Page de Modification de Profil
+La page de modification de profil permet aux utilisateurs de modifier leurs informations personnelles.
+
+### URL du production
+L'application est accessible à l'adresse suivante : https://tp-excel.wbpro.fr
