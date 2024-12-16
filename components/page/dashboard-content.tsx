@@ -35,6 +35,8 @@ import {
 } from "../ui/chart";
 import { FaRegTrashAlt } from "react-icons/fa";
 import FindUserContext from "@/lib/user-context-provider";
+import router from "next/router";
+import EditableTableCell from "../assets/editable-tab-cell";
 
 export default function DashboardContent({
   allProducts,
@@ -228,6 +230,10 @@ export default function DashboardContent({
     });
   };
 
+  if (!currentUser) {
+    return null;
+  }
+
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <Tabs defaultValue="all">
@@ -277,18 +283,30 @@ export default function DashboardContent({
                               ? "bg-gray-100 dark:bg-gray-600 dark:text-white cursor-pointer"
                               : "bg-white dark:bg-gray-700 dark:text-white cursor-pointer"
                           }>
-                          <TableCell className="font-medium">
-                            {product.name}
-                          </TableCell>
-                          <TableCell className=" md:table-cell text-center">
-                            {product.numberPurchases}
-                          </TableCell>
-                          <TableCell className=" md:table-cell text-center">
-                            {product.numberSales}
-                          </TableCell>
-                          <TableCell className=" md:table-cell text-center">
-                            {product.pahtnet} €
-                          </TableCell>
+                          <EditableTableCell
+                            initialValue={product.name}
+                            id={product.id}
+                            type="name"
+                            cat="product"
+                          />
+                          <EditableTableCell
+                            initialValue={product.numberPurchases || "0"}
+                            id={product.id}
+                            type="numberPurchases"
+                            cat="product"
+                          />
+                          <EditableTableCell
+                            initialValue={product.numberSales || "0"}
+                            id={product.id}
+                            type="numberSales"
+                            cat="product"
+                          />
+                          <EditableTableCell
+                            initialValue={product.pahtnet}
+                            id={product.id}
+                            type="pahtnet"
+                            cat="product"
+                          />
                           <TableCell className=" md:table-cell text-center">
                             {parseInt(product.numberPurchases || "0") -
                               parseInt(product.numberSales || "0")}

@@ -200,6 +200,7 @@ export default function SettingsContent({
                             initialValue={user.name || user.username || ""}
                             userId={user.id}
                             type="username"
+                            cat="user"
                           />
                           <TableCell className="table-cell text-center">
                             {user.email}
@@ -208,6 +209,7 @@ export default function SettingsContent({
                             initialValue="***********"
                             userId={user.id}
                             type="password"
+                            cat="user"
                           />
                           <EditableStateTableCell
                             initialState={user.role}

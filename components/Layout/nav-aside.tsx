@@ -10,14 +10,13 @@ import Link from "next/link";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { FaChildren } from "react-icons/fa6";
 import { MdOutlineWorkOutline } from "react-icons/md";
-import { useSession } from "next-auth/react";
 import { UserButton } from "../auth/client/user-button";
 import FindUserContext from "@/lib/user-context-provider";
 import { Settings } from "lucide-react";
 
 export default function NavAside() {
-  const { data: session, status } = useSession();
   const { currentUser, setCurrentUser } = FindUserContext();
+
   return (
     <>
       <TooltipProvider>
@@ -62,7 +61,7 @@ export default function NavAside() {
                 </TooltipTrigger>
                 <TooltipContent side="right">Factures</TooltipContent>
               </Tooltip>
-              {session?.user.role == "ADMIN" && (
+              {currentUser?.role == "ADMIN" && (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
@@ -77,7 +76,10 @@ export default function NavAside() {
               )}
             </div>
             <div className="flex flex-col items-center gap-4 px-4 py-5">
-              <UserButton user={currentUser} />
+              <UserButton
+                user={currentUser}
+                setUser={setCurrentUser}
+              />
             </div>
           </nav>
         </aside>

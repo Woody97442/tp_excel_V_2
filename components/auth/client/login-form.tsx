@@ -23,6 +23,7 @@ import { FormError } from "@/components/form-components/form-error";
 import { FormSuccess } from "@/components/form-components/form-success";
 import { FaArrowRight } from "react-icons/fa6";
 import { login } from "@/action/login";
+import { revalidatePath } from "next/cache";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();

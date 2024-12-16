@@ -7,15 +7,18 @@ import { toast } from "../ui/use-toast";
 import { MdOutlineModeEdit } from "react-icons/md";
 import FindUserContext from "@/lib/user-context-provider";
 import { EditUser } from "@/action/user";
+import { EditProduct } from "@/action/product";
 
 const EditableTableCell = ({
   initialValue,
-  userId,
+  id,
   type,
+  cat,
 }: {
-  initialValue: string;
-  userId: string;
+  initialValue: string | number;
+  id: string | number;
   type: string;
+  cat: string;
 }) => {
   const { currentUser } = FindUserContext();
   const [isEditing, setIsEditing] = useState(false);
@@ -40,21 +43,45 @@ const EditableTableCell = ({
     setIsEditing(false);
     if (value !== initialValue) {
       startTransition(() => {
-        EditUser(userId, value, type).then((data) => {
-          if (data?.success) {
-            toast({
-              title: "Succès",
-              description: data.success,
+        switch (cat) {
+          case "user":
+            EditUser(id as string, value as string, type).then((data) => {
+              if (data?.success) {
+                toast({
+                  title: "Succès",
+                  description: data.success,
+                });
+              }
+              if (data?.error) {
+                toast({
+                  variant: "destructive",
+                  title: "Erreur",
+                  description: data.error,
+                });
+              }
             });
-          }
-          if (data?.error) {
-            toast({
-              variant: "destructive",
-              title: "Erreur",
-              description: data.error,
+            break;
+          case "product":
+            EditProduct(id as number, value as string, type).then((data) => {
+              if (data?.success) {
+                toast({
+                  title: "Succès",
+                  description: data.success,
+                });
+              }
+              if (data?.error) {
+                toast({
+                  variant: "destructive",
+                  title: "Erreur",
+                  description: data.error,
+                });
+              }
             });
-          }
-        });
+            break;
+
+          default:
+            break;
+        }
       });
     }
   };

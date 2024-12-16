@@ -23,12 +23,14 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
 
-  const user = await getUserById(session?.user.id as string);
+  const user = session?.user?.id
+    ? await getUserById(session.user.id as string)
+    : null;
 
   return (
-    <SessionProvider session={session}>
-      <html lang="fr">
-        <body className={inter.className + " bg-[#f5f5f5] dark:bg-gray-900"}>
+    <html lang="fr">
+      <body className={inter.className + " bg-[#f5f5f5] dark:bg-gray-900"}>
+        <SessionProvider session={session}>
           <UserContextProvider user={user}>
             <div className="flex min-h-screen w-full flex-col bg-muted/40 dark:bg-gray-800">
               <NavAside />
@@ -39,8 +41,8 @@ export default async function RootLayout({
             </div>
           </UserContextProvider>
           <Toaster />
-        </body>
-      </html>
-    </SessionProvider>
+        </SessionProvider>
+      </body>
+    </html>
   );
 }
