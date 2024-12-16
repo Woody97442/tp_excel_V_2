@@ -198,7 +198,7 @@ export default function SettingsContent({
                           }>
                           <EditableTableCell
                             initialValue={user.name || user.username || ""}
-                            userId={user.id}
+                            id={user.id}
                             type="username"
                             cat="user"
                           />
@@ -207,7 +207,7 @@ export default function SettingsContent({
                           </TableCell>
                           <EditableTableCell
                             initialValue="***********"
-                            userId={user.id}
+                            id={user.id}
                             type="password"
                             cat="user"
                           />
