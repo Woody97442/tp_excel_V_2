@@ -162,7 +162,7 @@ export default function PupilsContent({
         <TabsContent value="all">
           <Card x-chunk="dashboard-06-chunk-0">
             <CardHeader>
-              <CardTitle>Tous les Elève</CardTitle>
+              <CardTitle>Tous les Elèves</CardTitle>
               <CardDescription>
                 Gérez vos Elève et visualiser leurs informations.
               </CardDescription>
